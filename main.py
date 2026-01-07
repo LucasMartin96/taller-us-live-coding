@@ -4,6 +4,8 @@ from db import engine
 from sqlalchemy.orm import Session
 from models import User, Feed
 from starlette import status
+from fastapi import Depends
+from dependencies import get_db
 
 
 app = FastAPI()
@@ -11,14 +13,14 @@ app = FastAPI()
 
 
 @app.post("/user", status_code=status.HTTP_201_CREATED)
-def create_user(req: CreateUserRequest) -> CreatedUserResponse:
+def create_user(req: CreateUserRequest, db: Session = Depends(get_db)) -> CreatedUserResponse:
+    user = User(name=req.name, last_name=req.last_name, phone=req.phone, balance=req.balance)  
 
-    with Session(engine) as session:
-        user = User(name=req.name, last_name=req.last_name, phone=req.phone, balance=req.balance)
-        session.add(user)
-        session.commit()
-
-    return CreatedUserResponse(id= user.id, last_name=user.last_name, phone=user.phone, balance=user.balance, credit_debt=user.credit_debt)
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    response = CreatedUserResponse(id= user.id, last_name=user.last_name, phone=user.phone, balance=user.balance, credit_debt=user.credit_debt)
+    return response
 
 @app.post("/user-payment", status_code=status.HTTP_200_OK)
 def pay_user(req: PayUserRequest):
