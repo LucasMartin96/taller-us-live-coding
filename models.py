@@ -27,3 +27,4 @@ class Feed(Base, TimestampMixin):
     user_pay_id = Column(Integer)
     user_paid_id = Column(Integer)
     ammount = Column(Double, nullable=False)
+    feed_type = Column(String, nullable=False)
