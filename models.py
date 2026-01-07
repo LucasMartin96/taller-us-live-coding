@@ -1,11 +1,14 @@
-from sqlalchemy import Column, Integer, String, Float, Double
+from sqlalchemy import Column, Integer, String, Float, Double, DateTime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column
+from datetime import datetime
 
 Base = declarative_base()
 
+class TimestampMixin:
+    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
 
-class User(Base):
+class User(Base, TimestampMixin):
     __tablename__ = "User"
     
     id = Column(Integer, autoincrement=True, primary_key=True)
@@ -17,10 +20,10 @@ class User(Base):
 
 
 
-class Feed(Base):
+class Feed(Base, TimestampMixin):
     __tablename__ = "Feed"
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     user_pay_id = Column(Integer)
     user_paid_id = Column(Integer)
-    ammount = Column()
+    ammount = Column(Double, nullable=False)
