@@ -6,7 +6,7 @@ from models import User, Feed
 from starlette import status
 from fastapi import Depends
 from dependencies import get_db, get_user_service, get_feed_service, get_friend_service, get_transaction_service
-from services import UserService, TransactionService
+from services import UserService, TransactionService, FeedService
 
 
 app = FastAPI()
@@ -29,8 +29,9 @@ def create_transaction(req: PayUserRequest, user_service: UserService = Depends(
 
     return {"result": "success"}
    
-
-
+@app.get("/users/{user_id}/feed", status_code=status.HTTP_200_OK)
+def get_feed(user_id: int,feed_service: FeedService = Depends(get_feed_service)):
+    return feed_service.get_user_feed(user_id)
 
 
 
