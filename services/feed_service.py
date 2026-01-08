@@ -14,8 +14,8 @@ class FeedService:
             joinedload(Feed.user_paid)
         ).filter(
             (Feed.transaction.has(Transaction.payer_id == user_id)) |
-            (Feed.transaction.has(Transaction.payee_id == user_id))
+            (Feed.transaction.has(Transaction.payee_id == user_id)) |
+            
+            (Feed.user_pay_id == user_id) |
+            (Feed.user_paid_id == user_id)
         ).order_by(Feed.created_at.desc()).all()
-    
-    
-    
