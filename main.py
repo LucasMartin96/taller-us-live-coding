@@ -7,18 +7,25 @@ from starlette import status
 from fastapi import Depends
 from dependencies import get_db, get_user_service, get_feed_service, get_friend_service, get_transaction_service
 from services import UserService, TransactionService, FeedService, FriendService
-
+from fastapi import HTTPException
 
 app = FastAPI()
 
 
 
 @app.post("/users", status_code=status.HTTP_201_CREATED)
-def create_user(req: CreateUserRequest, user_service: UserService = Depends(get_user_service)) -> CreatedUserResponse:
+def create_user(
+    req: CreateUserRequest,
+    user_service: UserService = Depends(get_user_service)
+) -> CreatedUserResponse:
+    try:
 
-    response = user_service.create_user(req)
+        result =  user_service.create_user(req)
+        
+        return CreatedUserResponse(**result.__dict__)
 
-    return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/transactions", status_code=status.HTTP_200_OK)
 def create_transaction(req: PayUserRequest, user_service: UserService = Depends(get_user_service), transactions_service: TransactionService = Depends(get_transaction_service)):
