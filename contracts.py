@@ -1,14 +1,14 @@
+from pydantic import BaseModel
 
 
-
-class CreateUserRequest():
+class CreateUserRequest(BaseModel):
     name: str
     last_name: str
     phone: str
     balance: float
     credit_debt: float
 
-class CreatedUserResponse():
+class CreatedUserResponse(BaseModel):
     id: int
     name: str
     last_name: str
@@ -16,7 +16,7 @@ class CreatedUserResponse():
     balance: float
     credit_debt: float
 
-class PayUserRequest():
+class PayUserRequest(BaseModel):
     user_to_pay_id: int
     ammount: float
     description: str
