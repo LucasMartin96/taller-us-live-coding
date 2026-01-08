@@ -6,7 +6,7 @@ class UserService:
     def __init__(self, db: Session):
         self.db = db
     
-    def create_user(self, req: CreateUserRequest):
+    def create_user(self, req: CreateUserRequest) -> User:
         try:
             user = User(
                 name=req.name,
@@ -19,14 +19,7 @@ class UserService:
             self.db.commit()
             self.db.refresh(user)
             
-            return CreatedUserResponse(
-                id=user.id,
-                name=user.name,
-                last_name=user.last_name,
-                phone=user.phone,
-                balance=user.balance,
-                credit_debt=user.credit_debt
-            )
+            return user
         except Exception as e:
             self.db.rollback()
             raise
