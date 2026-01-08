@@ -42,9 +42,9 @@ class Feed(Base, TimestampMixin):
     
     transaction_id = Column(Integer, ForeignKey('Transaction.id'), nullable=True)
     
-    user_pay_id = Column(Integer, ForeignKey('User.id'), nullable=True)
-    user_paid_id = Column(Integer, ForeignKey('User.id'), nullable=True)
+    payer_id = Column(Integer, ForeignKey('User.id'), nullable=True)
+    payee_id = Column(Integer, ForeignKey('User.id'), nullable=True)
     
     transaction = relationship('Transaction', backref='feed_entries')
-    user_pay = relationship('User', foreign_keys=[user_pay_id])
-    user_paid = relationship('User', foreign_keys=[user_paid_id])
+    payer_id = relationship('User', foreign_keys=[payer_id])
+    payee_id = relationship('User', foreign_keys=[payee_id])
