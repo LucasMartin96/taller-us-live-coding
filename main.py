@@ -6,7 +6,7 @@ from models import User, Feed
 from starlette import status
 from fastapi import Depends
 from dependencies import get_db, get_user_service, get_feed_service, get_friend_service, get_transaction_service
-from services import UserService, TransactionService, FeedService
+from services import UserService, TransactionService, FeedService, FriendService
 
 
 app = FastAPI()
@@ -34,6 +34,13 @@ def get_feed(user_id: int,feed_service: FeedService = Depends(get_feed_service))
     return feed_service.get_user_feed(user_id)
 
 
+@app.post("/users/{user_id}/friends", status_code=status.HTTP_200_OK)
+def add_friend(
+    user_id: int,
+    friend_id: int,
+    friend_service: FriendService = Depends(get_friend_service)
+):
+    return friend_service.add_friend(user_id, friend_id)
 
 
 
