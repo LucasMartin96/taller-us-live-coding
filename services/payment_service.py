@@ -3,7 +3,7 @@ from models import User
 
 
 class PaymentService():
-    def calculate_payments_credit_balance(self, payer : User, amount: float):
+    def calculate_payment_split(self, payer : User, amount: float):
         balance_use = min(payer.balance, amount)
         credit_use = max(0.0, amount - payer.balance)
         return balance_use, credit_use
