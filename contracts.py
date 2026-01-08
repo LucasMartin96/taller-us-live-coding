@@ -19,3 +19,4 @@ class CreatedUserResponse():
 class PayUserRequest():
     user_to_pay_id: int
     ammount: float
+    description: str

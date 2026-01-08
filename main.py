@@ -6,7 +6,7 @@ from models import User, Feed
 from starlette import status
 from fastapi import Depends
 from dependencies import get_db, get_user_service, get_feed_service, get_friend_service, get_transaction_service
-from services import UserService
+from services import UserService, TransactionService
 
 
 app = FastAPI()
@@ -20,17 +20,15 @@ def create_user(req: CreateUserRequest, user_service: UserService = Depends(get_
 
     return response
 
-@app.post("/user-payment", status_code=status.HTTP_200_OK)
-def pay_user(req: PayUserRequest):
-    pass
-    
+@app.post("/transactions", status_code=status.HTTP_200_OK)
+def create_transaction(req: PayUserRequest, user_service: UserService = Depends(get_user_service), transactions_service: TransactionService = Depends(get_transaction_service)):
+    payer = user_service.get_user(1)
+    payee = user_service.get(req.user_to_pay_id)
 
-@app.get("/feed", status_code=status.HTTP_200_OK)
-def get_feed():
-    # Lets asume i have a token and i can get the user from jwt
-    user_id = 1
+    transactions_service.create_payment_transaction(payer, payee, req.ammount, description=req.description)
 
-    pass
+    return {"result": "success"}
+   
 
 
 
